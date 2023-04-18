@@ -15,18 +15,21 @@ RUN \
 # Generate prisma types
 # ------------------------------
 
-FROM node:18-alpine AS prisma
+FROM node:18-alpine AS migrate
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY ./prisma ./prisma
 RUN npx prisma generate
+CMD ["sh", "prisma/migrate.sh"]
+
+FROM migrate AS dev
 
 # ------------------------------
 # Build NextJS app
 # ------------------------------
 FROM node:18-alpine AS builder
 WORKDIR /app
-COPY --from=prisma /app/node_modules ./node_modules
+COPY --from=migrate /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
