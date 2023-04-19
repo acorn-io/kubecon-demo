@@ -10,7 +10,7 @@ profiles: prod: {
     environment: "Production"
 }
 
-services: db: image: "ghcr.io/acorn-io/aws/rds/aurora-serverless"
+services: db: image: "ghcr.io/acorn-io/aws/rds"
 
 containers: app: {
 	build: context: "."
